@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Page Title</title>
+    <style>
+        body {margin: 0}
+        canvas{display: block}
+    </style>
+</head>
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
+    <script>
+        var scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+        var renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth,window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        var light = new THREE.PointLight(0xffffff, 3);
+        light.position.set(0,0,5);
+        scene.add(light);
+
+        var loader = new THREE.TextureLoader();
+
+
+        var texture = loader.load("earth.jpg");
+        var material = new THREE.MeshStandardMaterial({
+            map: texture
+        });
+        var geometry = new THREE.SphereGeometry(0.8, 32, 32);//radio,las caras de los emisferios
+        var earth = new THREE.Mesh(geometry,material);
+
+        var textureSun = loader.load("sun.jpg");
+        var material2 = new THREE.MeshStandardMaterial({
+            map: textureSun,
+            transparent: 0.5
+        });
+        var geometry2 = new THREE.SphereGeometry(1.5, 32, 32);//radio,las caras de los emisferios
+        var sun = new THREE.Mesh(geometry2, material2);
+
+        var textureMoon = loader.load("moon.jpg");
+        var material3 = new THREE.MeshStandardMaterial({
+            map: textureMoon
+        });
+        var geometry3 = new THREE.SphereGeometry(0.3, 32, 32);//radio,las caras de los emisferios
+        var moon = new THREE.Mesh(geometry3, material3);
+
+        var contenedor = new THREE.Object3D();
+        var contenedor2 = new THREE.Object3D();
+        
+        contenedor.add(earth);
+        contenedor.add(moon);
+        //earth.add(moon);
+
+        contenedor2.add(contenedor);
+
+        scene.add(sun);
+        scene.add(contenedor);
+
+        camera.position.z = 5;
+
+        var t = 0;
+
+        var animate = function(){
+            requestAnimationFrame (animate);
+
+            t += 0.05 // velocidad de movimiento
+                
+            earth.rotation.y += 0.01;
+            sun.rotation.y += 0.1;
+            moon.rotation.y += 0.01;
+            earth.position.x = 3;
+            earth.position.z = 3;
+            //moon.position.x = 1;
+            //moon.position.z = 4;
+            moon.position.y = 1;
+
+            moon.position.x = (2*Math.cos(t)+3)
+            moon.position.z = (2*Math.sin(t)+3)
+
+            contenedor.rotation.y += 0.01;
+            contenedor2.rotation.y += 0.1;
+            renderer.render(scene, camera);
+
+        };
+
+        animate();
+    </script>
+</body>
+</html>
