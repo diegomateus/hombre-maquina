@@ -17,7 +17,7 @@
         document.body.appendChild(renderer.domElement);
 
         var light = new THREE.PointLight(0xffffff, 3);
-        light.position.set(0,0,5);
+        light.position.set(0,0,0);
         scene.add(light);
 
         var loader = new THREE.TextureLoader();
@@ -31,9 +31,8 @@
         var earth = new THREE.Mesh(geometry,material);
 
         var textureSun = loader.load("sun.jpg");
-        var material2 = new THREE.MeshStandardMaterial({
+        var material2 = new THREE.MeshBasicMaterial({
             map: textureSun,
-            transparent: 0.5
         });
         var geometry2 = new THREE.SphereGeometry(1.5, 32, 32);//radio,las caras de los emisferios
         var sun = new THREE.Mesh(geometry2, material2);
@@ -57,7 +56,7 @@
         scene.add(sun);
         scene.add(contenedor);
 
-        camera.position.z = 5;
+        camera.position.z = 10;
 
         var t = 0;
 
