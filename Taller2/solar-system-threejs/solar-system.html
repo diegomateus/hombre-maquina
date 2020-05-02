@@ -23,9 +23,9 @@
         var loader = new THREE.TextureLoader();
 
 
-        var texture = loader.load("earth.jpg");
+        var textureEarth = loader.load("earth.jpg");
         var material = new THREE.MeshStandardMaterial({
-            map: texture
+            map: textureEarth
         });
         var geometry = new THREE.SphereGeometry(0.8, 32, 32);//radio,las caras de los emisferios
         var earth = new THREE.Mesh(geometry,material);
