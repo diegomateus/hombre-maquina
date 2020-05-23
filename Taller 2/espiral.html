@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>My first three.js app</title>
+        <title>Taller Brazo Espiral</title>
         <style>
             body { margin: 0; }
             canvas { display: block; }
@@ -16,8 +16,8 @@
             renderer.setSize( window.innerWidth, window.innerHeight );
             document.body.appendChild( renderer.domElement );
                         
-            var l1 = 12
-            var l2 = 12
+            var l1 = 13
+            var l2 = 13
             var geometry = new THREE.BoxGeometry(1,l1,1);
             
             var geometry2 = new THREE.BoxGeometry(2,2,2);
@@ -39,12 +39,10 @@
             contenedor2.position.y=-l1
             contenedor.add( contenedor2);
             scene.add( contenedor );
-            
-
             camera.position.z = 30;
             
             var ang = [0,0]
-            cube3.position.x = 0;
+            cube3.position.x = 10;
             cube3.position.y = 0;
             var calcular = function(x,y){
                 var a2=Math.PI-Math.acos((l1*l1+l2*l2-x*x-y*y)/(2*l1*l2));
@@ -56,10 +54,10 @@
                 requestAnimationFrame( animate );
                 t += 0.05
 
-                if(t <= 50){
-                    cube3.position.x = (Math.cos(t)*(t*0.2)) + 10 ;
-                    cube3.position.y = t * 0.2
-                    cube3.position.z = (Math.sin(t)*(t*0.2)) + 10;
+                if(t <= 65){
+                    cube3.position.x=5*(t/60)*Math.cos(t)+15
+					cube3.position.z=6*(t/60)*Math.sin(t)
+					cube3.position.y += (0.01)
                 }
                 
                 var cubeA = new THREE.Mesh( geometryPoint, material );
