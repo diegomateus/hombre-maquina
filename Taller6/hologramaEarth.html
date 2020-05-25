@@ -1,0 +1,70 @@
+<html>
+	<head>
+		<title>My first three.js app</title>
+		<style>
+			body { margin: 0; }
+			canvas { display: block; }
+		</style>
+	</head>
+	<body>
+		<script src="https://threejs.org/build/three.js"></script>
+		<script>
+			var scene = new THREE.Scene();
+			var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
+
+			var renderer = new THREE.WebGLRenderer();
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			document.body.appendChild( renderer.domElement );
+
+			var light = new THREE.PointLight(0xffffff, 1.5);
+        	light.position.set(0,0,5);
+        	scene.add(light);
+
+			var geometry = new THREE.SphereGeometry( 0.8, 32, 32);
+			var loader = new THREE.TextureLoader();
+			var texture = loader.load("earth.jpg");
+        	var material = new THREE.MeshStandardMaterial({
+            	map: texture
+       		});
+
+			var figure0 = new THREE.Mesh( geometry, material );
+            var figure1 = new THREE.Mesh( geometry, material );
+            var figure2 = new THREE.Mesh( geometry, material );
+            var figure3 = new THREE.Mesh( geometry, material );
+			
+			scene.add( figure0 );
+            scene.add( figure1 );
+            scene.add( figure2 );
+            scene.add( figure3 );
+
+			camera.position.z = 10;
+
+			figure0.position.x = 2;
+			figure0.rotation.z = -1.57;
+			figure0.rotation.x = -1.57;
+			
+            figure1.position.y = 2;
+
+            figure2.position.x = -2;
+			figure2.rotation.z = 1.57;
+			figure2.rotation.x = -1.57;
+
+            figure3.position.y = -2;
+			figure3.rotation.z = 3.14;
+			figure3.rotation.y = -3.14;
+
+
+			var animate = function () {
+				requestAnimationFrame( animate );
+
+				figure0.rotation.x += 0.01;
+                figure2.rotation.x -= 0.01;
+                figure1.rotation.y += 0.01;
+            	figure3.rotation.y -= 0.01;
+				renderer.render( scene, camera );
+			};
+
+			animate();
+		</script>
+	</body>
+</html>
