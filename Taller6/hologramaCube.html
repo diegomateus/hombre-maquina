@@ -1,0 +1,69 @@
+<html>
+	<head>
+		<title>My first three.js app</title>
+		<style>
+			body { margin: 0; }
+			canvas { display: block; }
+		</style>
+	</head>
+	<body>
+		<script src="https://threejs.org/build/three.js"></script>
+		<script>
+			var scene = new THREE.Scene();
+			var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
+
+			var renderer = new THREE.WebGLRenderer();
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			document.body.appendChild( renderer.domElement );
+
+			geometry = new THREE.CubeGeometry(1, 1, 1);
+
+            for ( var i = 0; i < geometry.faces.length; i += 2 ) {
+            var faceColor = Math.random() * 0xffffff;
+            geometry.faces[i].color.setHex(faceColor);
+            geometry.faces[i+1].color.setHex(faceColor);
+            }
+
+            material = new THREE.MeshBasicMaterial( { vertexColors: THREE.FaceColors } );
+
+			var figure0 = new THREE.Mesh( geometry, material );
+            var figure1 = new THREE.Mesh( geometry, material );
+            var figure2 = new THREE.Mesh( geometry, material );
+            var figure3 = new THREE.Mesh( geometry, material );
+			
+			scene.add( figure0 );
+            scene.add( figure1 );
+            scene.add( figure2 );
+            scene.add( figure3 );
+
+			camera.position.z = 10;
+
+            
+            figure0.position.x = 2;
+            figure0.rotation.z = 3.14;
+            figure0.rotation.x = -1.57;
+
+            figure1.position.y = 2;
+            figure1.rotation.z = -1.57;
+
+            figure2.position.x = -2;
+            figure2.rotation.x = -1.57;
+            
+            figure3.position.y = -2;
+            figure3.rotation.z = 1.57;
+            figure3.rotation.y = -3.14;
+
+			var animate = function () {
+				requestAnimationFrame( animate );
+
+				figure0.rotation.x += 0.01;
+                figure2.rotation.x -= 0.01;
+                figure1.rotation.y += 0.01;
+                figure3.rotation.y -= 0.01;
+				renderer.render( scene, camera );
+			};
+
+			animate();
+		</script>
+	</body>
+</html>
