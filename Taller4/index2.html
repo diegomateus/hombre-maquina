@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<htmllang="en">
+    <head >
+        <title>Taller VR Raycast</title>
+        <style>
+            body { margin: 0; }
+            canvas { display: block; }
+        </style>
+        <link type="text/css" rel="stylesheet" href="main.css">
+    </head>
+    <body>
+    <div id="overlay">
+			<div>
+				<button id="startButton">Empezar Demo</button>
+				<p>Using device orientation might require a user interaction.</p>
+                <p>Use 2,4,6,8 para rotar la camara.</p>
+                <p>Use w,a,s,d para moverla lateralmente.</p>
+			</div>
+		</div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
+        <script src="StereoEffect.js"></script>
+        <script src="DeviceOrientationControls.js"></script>
+        <script type="module">
+            var camera, scene, renderer, controls, raycaster,mouse,light,interruptor,interruptor2,mesh,arrow, cube;
+            var effect;
+            var startButton = document.getElementById( 'startButton' );
+			startButton.addEventListener( 'click', function () {
+                camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+                camera.position.y = 1.6;
+				controls = new THREE.DeviceOrientationControls( camera );
+//                controls.connect();
+				init();
+				animate();
+
+			}, false );
+
+			function init() {
+                scene = new THREE.Scene();
+				var overlay = document.getElementById( 'overlay' );
+				overlay.remove();
+                mouse = new THREE.Vector2();
+                raycaster= new THREE.Raycaster();
+				scene.background = new THREE.MeshBasicMaterial( {
+					envMap: new THREE.CubeTextureLoader().load( [  'px.jpg', 'nx.jpg', 'py.jpg', 'ny.jpg', 'pz.jpg', 'nz.jpg'] )} );
+                camera.position.x=0;
+                camera.position.y=0;
+                camera.position.z=0;
+
+			    var Pared = new THREE.PlaneGeometry( 6, 6 );
+		    	var materialWall = new THREE.MeshStandardMaterial( {color: 0xFFFFFF} );
+			    var wall = new THREE.Mesh( Pared, materialWall );
+			    wall.position.y = 1.5;
+			    wall.position.z = -2.5;
+			    scene.add( wall );
+		        light = new THREE.PointLight( 0xFFFF00, 2);
+			    light.position.set( 60, 50, 40 );
+			    scene.add( light );
+			    var light2 = new THREE.AmbientLight( 0xffffff,1 ); // soft white light
+			    scene.add( light2 )
+                scene.add(light);
+                var geometrySwitch = new THREE.BoxGeometry( 0.4, 0.4, 0.2);
+                var materialSwitch =  new THREE.MeshStandardMaterial({ color: 0xfda4a4});
+                var interruptor = new THREE.Mesh( geometrySwitch, materialSwitch);
+                interruptor.position.set(0,1,-2.5);
+                scene.add(interruptor);
+                var geometrySwitch2 = new THREE.BoxGeometry( 0.15, 0.3, 0.1);
+                var materialSwitch2 =  new THREE.MeshStandardMaterial({ color: 0x800080});
+                var interruptor2 = new THREE.Mesh( geometrySwitch2, materialSwitch2);
+                interruptor2.position.set(0,1,-2.4);
+                interruptor2.name = "interruptor";
+                scene.add(interruptor2);
+                arrow = new THREE.ArrowHelper( raycaster.ray.direction, raycaster.ray.origin, 100, Math.random() * 0xffffff );
+                scene.add( arrow );
+				renderer = new THREE.WebGLRenderer( { antialias: true } );
+				renderer.setPixelRatio( window.devicePixelRatio );
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				document.body.appendChild( renderer.domElement );
+                effect= new THREE.StereoEffect(renderer);
+               effect.setSize(window.innerWidth,window.innerHeight);
+			}
+            
+         var animate = function () {
+                 window.requestAnimationFrame( animate );
+                //raycaster.setFromCamera( mouse, camera);
+                 arrow.setDirection(raycaster.ray.direction);
+ 
+                // update the raycaster
+                raycaster.set(camera.getWorldPosition(), camera.getWorldDirection());
+                var intersects= raycaster.intersectObjects(scene.children,true);
+                if(intersects.length>0)
+                {
+                    if(intersects[0].object.name=="interruptor")
+                    {
+                        if(light.visible)
+                        {
+                            light.visible=false;
+                        }
+
+                    }
+
+                }
+        //        controls.update();
+                effect.render(scene, camera);
+                //renderer.render(scene, camera);
+            };
+
+
+            		document.addEventListener("keypress", function(event){
+				 var x = event.key;
+				 if(x == 'a'){
+					 camera.position.x -= 0.02;
+				 }
+				 if(x == 'd'){
+					 camera.position.x += 0.02;
+				 }
+				 if(x == 'w'){
+					 camera.position.z -= 0.02;
+				 }
+				 if(x == 's' ){
+					 camera.position.z += 0.02;
+				 }
+				 if(x == '8'){
+					 camera.rotation.x += 0.02;
+				 }
+				 if(x == '2'){
+					 camera.rotation.x -= 0.02;
+				 }
+				 if(x == '6'){
+					 camera.rotation.y -= 0.02;
+				 }
+				 if(x == '4'){
+					 camera.rotation.y += 0.02;
+				 }
+
+			
+
+			});
+        </script>
+    </body>
+</html>
